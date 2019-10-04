@@ -1,0 +1,60 @@
+=======================================================
+--To print Jason in pretty format:
+=======================================================
+
+import json
+print(json.dumps(a, indent=4)) -- where a is Dic, String etc.
+print(json.dumps(a, indent=4, separators=('. ', ' = '))) - replace , with . and : with =
+print(json.dumps(a, indent=4, sort_keys=True)) - Sort keys in alphabatical order
+
+=======================================================
+--How to write Variable in python to json file.
+=======================================================
+
+import json
+a = some value
+
+with open('demo.json', 'w') as fh:
+	fh.write(json.dumps(a, indent=4))
+	
+=======================================================
+--How to read Variable in python to json file.
+=======================================================
+
+import json
+
+with open('demo.json', 'r') as fh:
+	print(fh.read())
+	
+	print(type(fh.read())) --Gives you the type of data
+
+	json_str = fh.read()
+	json_value = json.load(json_str)
+	print(type(json_value)) -- converts to dictionary
+	print(json_value['key']) -- To fetch json value
+	
+=======================================================
+--How to use Iterator in python.
+=======================================================
+
+class ListIterator:
+	
+	def __init__(self, list):
+		self.__list = list
+		self.__index = -1
+		
+	def __iter__(self):
+		return self
+		
+	def __next__(self):
+		self.__index += 1
+		if self.__index >= len(self.__list):
+			raise StopIteration
+		return self.__list(self.__index)
+		
+a = [1,2,3,4,5,6]
+mylist = ListIterator(a)
+it = iter(mylist)
+
+for i in it:
+	print(i)
