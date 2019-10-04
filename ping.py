@@ -1,6 +1,8 @@
 import json
 import subprocess
 import os
+import sys
+import platform
 
 def parsejson(d):
 	for k, v in d.items():
@@ -19,17 +21,40 @@ def parselist(d):
 		else:
 			pingtest(l)
 
-def pingtest(l):
-	for n in range(1, 10):
-		ip=(l+"{0}").format(n)
-		result=subprocess.call(["ping", "-c", "1", ip])
-		print(result)
-		if result == 0:
-			print(ip, "active")
-		else:
-			print(ip, "inactive")
-
+#def pingtest(l):
+#	for n in range(1, 2):
+#		ip=(l+"{0}").format(n)
+#		result=subprocess.call(["ping", "-c", "1", ip])
+#		#print(result)
+#		if result == 0:
+#			print(ip, "active")
+#		else:
+#			print(ip, "inactive")
 			
+def pingtest(l):
+	for n in range(1, 2):
+		ip=(l+"{0}").format(n)
+		print(platform)
+		if platform == "linux" or platform == "darwin":
+			command=["ping", "-c", "3", "-i", "0.2", ip]
+			timeout=0.5
+		else:
+			command=["ping", "-n", "1", ip]
+			timeout=0.2
+		ping=subprocess.Popen(command,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+		try:             
+			[out, err]=ping.communicate(timeout=2.1)
+			if ping.returncode == 0:
+				if platform == "linux" or platform == "darwin":
+					print("Linux"+" Active")
+				else:
+					print("Windows"+" Active")
+		except subprocess.TimeoutExpired:
+			ping.kill()
+		finally:
+			print(ip)
+			
+
 f = open('properties.json')
 data = json.load(f)
 print(data)
