@@ -3,6 +3,8 @@ import subprocess
 import os
 import sys
 import platform
+import socket
+import pypyodbc
 
 def parsejson(d):
 	for k, v in d.items():
@@ -49,10 +51,39 @@ def pingtest(l):
 					print("Linux"+" Active")
 				else:
 					print("Windows"+" Active")
+					get_Host_name_IP(ip)
 		except subprocess.TimeoutExpired:
 			ping.kill()
-		finally:
-			print(ip)
+		#finally:
+		#	get_Host_name_IP(ip)
+			
+def get_Host_name_IP(ip):
+	try: 
+		print(ip)
+		host_name = socket.getfqdn(ip)
+		print("Hostname :  ",host_name)
+	except: 
+		print("Unable to get Hostname by IP") 
+	finally:
+		populate_DB(ip,host_name)
+		
+def populate_DB(ip,host_name):
+	try:
+		status = "Active"
+		conn = pypyodbc.connect('Driver={SQL Server};'
+								'Server=localhost;'
+								'Database=DemoDB;'
+								'Trusted_Connection=yes')
+		cursor = conn.cursor()
+		SQLCommand = ("INSERT INTO DemoDB.dbo.pinginfo(IPAddr, HostName, Status) VALUES(?,?,?)")
+		Values = [ip,host_name,status]
+		cursor.execute(SQLCommand,Values)	
+		conn.commit()
+		print("Data inserted")
+		conn.close()
+	except Exception as e: 
+		print(sys.exc_value)
+		catchEverything()
 			
 
 f = open('properties.json')
@@ -60,4 +91,6 @@ data = json.load(f)
 print(data)
 f.close()
 
+
 parsejson(data)
+
