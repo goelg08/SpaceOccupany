@@ -36,8 +36,8 @@ def parselist(d):
 def pingtest(l):
 	for n in range(1, 2):
 		ip=(l+"{0}").format(n)
-		print(platform)
-		if platform == "linux" or platform == "darwin":
+		print(platform.system())
+		if platform.system() == "linux" or platform.system() == "darwin":
 			command=["ping", "-c", "3", "-i", "0.2", ip]
 			timeout=0.5
 		else:
@@ -47,7 +47,7 @@ def pingtest(l):
 		try:             
 			[out, err]=ping.communicate(timeout=2.1)
 			if ping.returncode == 0:
-				if platform == "linux" or platform == "darwin":
+				if platform.system() == "linux" or platform.system() == "darwin":
 					print("Linux"+" Active")
 				else:
 					print("Windows"+" Active")
