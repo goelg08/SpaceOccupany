@@ -32,6 +32,7 @@ def buildiplist(l):
 			
 			
 def pingtest(ip):
+	print(ip)
 	if platform.system() == "linux" or platform.system() == "darwin":
 		command=["ping", "-c", "3", "-i", "0.2", ip]
 		timeout=0.5
@@ -45,10 +46,27 @@ def pingtest(ip):
 			if platform.system() == "linux" or platform.system() == "darwin":
 				return "Linux Active"
 			else:
-				return "Windows Active"
+				host_name = socket.getfqdn(ip)
+				print("Hostname :  ",host_name)
+				status = "Active"
+				conn = pypyodbc.connect('Driver={SQL Server};'
+										'Server=localhost;'
+										'Database=DemoDB;'
+										'Trusted_Connection=yes')
+				cursor = conn.cursor()
+				SQLCommand = ("INSERT INTO DemoDB.dbo.pinginfo(IPAddr, HostName, Status) VALUES(?,?,?)")
+				Values = [ip,host_name,status]
+				cursor.execute(SQLCommand,Values)	
+				conn.commit()
+				return "Data inserted"
+				conn.close()				
 	except subprocess.TimeoutExpired:
 		ping.kill()
-
+	except Exception as e: 
+		print(sys.exc_value)
+		catchEverything()
+	except: 
+		host_name = "NA"
 
 			
 start = time.perf_counter()
