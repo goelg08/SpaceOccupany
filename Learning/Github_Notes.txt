@@ -1,0 +1,56 @@
+Very Imp site:
+https://product.hubspot.com/blog/git-and-github-tutorial-for-beginners
+https://github.com/goelg08/Python.git
+
+Let's see what branch we are currently in! When we run git branch, it will display all of the branches that are associated with the repository.
+The branch that is highlighted indicates where in the repository we are currently located.
+
+Next, we will change our location to the master branch so we can be able to start off fresh when we create our new branch! (If you're already in the Master branch, perfect!)
+
+git branch
+git checkout master
+
+Let's create a new branch. In this tutorial, we'll call it "newer-branch"
+
+Git checkout -b "newer-branch"
+
+Now we've created a new branch so that means whatever change we make (ie creating a file or editing an existing one), will only affect this branch! This is great because we are keeping our code organized and we reduce the risk of messing up the whole project lol.
+So make any changes that you want to the new file. In this instance, I updated the README file.
+
+Next we will add the file to our commit. Choose one of two commands.
+The first command will add all files to the commit. You would usually only do this if you have made changes to every file or if there is only one file in the repo.
+
+git add .
+
+Option #2 (The one we will do in this tutorial) will only add the file that you specify that you want to commit! You will have to specify the relative path of the file you want to commit. In this case, it will be the README file.
+
+git add README.md
+
+Next, let's add a detailed description of what we've changed in our commit. -m simply stands for message.
+
+git commit -m "add a detailed description"
+
+The git push command allows you to send the commits from your local branch in your local Git repository to the remote repository and it will provide us the exact command we need to push our beautifully new branch to our Git repository! (my favourite command). Later on, we'll be able to merge our "newer-branch" commit to our master branch.
+
+git push
+git push --set-upstream origin newer-branch
+
+Now, let's check our GitHub!
+
+At this point, commits can be made on the new branch to implement the new feature. Once the feature is complete, the branch can be merged back into the main code branch (usually master).
+First we run git checkout master to change the active branch back to master. Then we run the command git merge new-branch to merge the new feature into the master branch. Note that git merge merges the specified branch into the currently active branch. So we need to be on the branch that we are merging into.
+
+$ git checkout master
+Switched to branch 'master'
+$ git merge new-branch
+
+Then your changes are their in Master (local)
+
+To push it to Github, make sure current branch is Master and run :
+
+git push
+
+
+Delete the branch on github :
+
+$ git push origin :[name_of_your_new_branch]
